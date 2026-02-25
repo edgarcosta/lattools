@@ -1,9 +1,9 @@
 """
 Test BV invariant -- Sage
-Run: sage -python tests/test_bv.py   (from repo root)
+Run: sage -python tests/test_bv.py [test_data_file]   (from repo root)
 
 Uses PARI's qfminim convention (v^T * M * v <= d) to match test_bv.gp and test_bv.m.
-Test data read from tests/test_bv_data.txt.
+Defaults to tests/test_bv_data.txt if no file is specified.
 """
 import sys, os, time
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'alt'))
@@ -28,7 +28,10 @@ def load_test_data(path):
     return data
 
 D = 4  # short vector bound
-data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_bv_data.txt')
+if len(sys.argv) > 1:
+    data_path = sys.argv[1]
+else:
+    data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_bv_data.txt')
 test_data = load_test_data(data_path)
 
 print("=" * 60)

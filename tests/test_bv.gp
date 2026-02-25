@@ -2,7 +2,9 @@
 \\ Test BV invariant -- PARI/GP
 \\ Run: sage -gp -q < tests/test_bv.gp   (from repo root)
 \\
-\\ Test data read from tests/test_bv_data.txt.
+\\ To use a custom test data file, set test_data_file before loading:
+\\   test_data_file = "path/to/data.txt"; \r tests/test_bv.gp
+\\ Defaults to tests/test_bv_data.txt.
 \\
 
 default(parisize, 256000000); \\ 256 MB stack
@@ -10,9 +12,11 @@ default(parisize, 256000000); \\ 256 MB stack
 
 \\ ---- Load test data ----
 
+if(type(test_data_file) != "t_STR", test_data_file = "tests/test_bv_data.txt");
+
 {
 my(lines, parts, entries, n, gram, ep, ex, td = List());
-lines = externstr("grep -v '^#' tests/test_bv_data.txt | grep -v '^[[:space:]]*$'");
+lines = externstr(Str("grep -v '^#' ", test_data_file, " | grep -v '^[[:space:]]*$'"));
 for(k = 1, #lines,
   parts = strsplit(lines[k], ":");
   entries = eval(parts[1]);

@@ -1,8 +1,8 @@
 /*
  * Test BV invariant -- Magma
- * Run: magma -b tests/test_bv.m   (from repo root)
+ * Run: magma -b tests/test_bv.m [test_data_file]   (from repo root)
  *
- * Test data read from tests/test_bv_data.txt.
+ * Defaults to tests/test_bv_data.txt if no file is specified.
  */
 
 SetColumns(0);
@@ -35,7 +35,12 @@ end function;
 // ---- Tests ----
 
 D := 4;
-data := LoadTestData("tests/test_bv_data.txt");
+if assigned args and #args ge 1 then
+    data_file := args[1];
+else
+    data_file := "tests/test_bv_data.txt";
+end if;
+data := LoadTestData(data_file);
 
 printf "============================================================\n";
 printf "BV invariant test -- Magma\n";
