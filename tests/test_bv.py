@@ -1,6 +1,6 @@
 """
 Test BV invariant -- Sage
-Run: sage tests/test_bv.sage   (from repo root)
+Run: sage -python tests/test_bv.py   (from repo root)
 
 Uses PARI's qfminim convention (v^T * M * v <= d) to match test_bv.gp and test_bv.m.
 Test data read from tests/test_bv_data.txt.
