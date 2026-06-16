@@ -17,6 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The runtime sagemath image ships gcc and the full SAGE_LOCAL (PARI
+      # headers + libpari) but not make or libc-dev (its build deps use
+      # --no-install-recommends), so install build-essential before compiling.
+      - name: Install build tools
+        run: apt-get update -qq && apt-get install -qq -y build-essential
+
       - name: Build C extensions (eqfminim.so, orbmod2.so)
         run: make
 
