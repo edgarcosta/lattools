@@ -1,0 +1,36 @@
+name: Tests (Sage / PARI-GP)
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  sage:
+    name: Sage / PARI-GP tests
+    runs-on: ubuntu-latest
+    container:
+      image: sagemath/sagemath:latest
+      # Run as root so the GHA workspace is writable and make/sage can build
+      # the C extensions in place.
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build C extensions (eqfminim.so, orbmod2.so)
+        run: make
+
+      # The test scripts print "PASS:" only when every hash matches, but they
+      # exit 0 regardless (GP swallows errors to status 0), so gate on that
+      # sentinel rather than on the exit code.
+      - name: Sage test
+        shell: bash
+        run: |
+          sage -python tests/test_bv.py | tee sage.out
+          grep -q '^PASS:' sage.out
+
+      - name: PARI/GP test
+        shell: bash
+        run: |
+          sage -gp -q < tests/test_bv.gp | tee gp.out
+          grep -q '^PASS:' gp.out
